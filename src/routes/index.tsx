@@ -9,7 +9,7 @@ import { ProductGrid } from "@/components/store/ProductCard";
 import { Pagination } from "@/components/store/Catalog";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (s: Record<string, unknown>) => ({ page: parseCatalogSearch(s).page }),
+  validateSearch: (s: Record<string, unknown>): { page?: number | undefined } => ({ page: parseCatalogSearch(s).page }),
   head: () => seo("Accueil", "ARTYFAM — vêtements, chaussures, sacs et maison, livrés en Tunisie et en Italie."),
   component: Home,
 });
