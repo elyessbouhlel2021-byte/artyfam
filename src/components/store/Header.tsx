@@ -32,7 +32,7 @@ export function Header() {
         <button className="inline-flex h-9 w-9 items-center justify-center rounded-md md:hidden" aria-label={t.nav.menu} aria-expanded={open} onClick={() => setOpen((o) => !o)}>
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
-        <Link to="/" aria-label="ARTYFAM — {t.nav.home}" className="shrink-0"><Logo /></Link>
+        <Link to="/" aria-label={`ARTYFAM — ${t.nav.home}`} className="shrink-0"><Logo /></Link>
         <nav aria-label="Main" className="ms-6 hidden items-center gap-6 md:flex">
           <Link to="/" className={linkCls} activeProps={active} activeOptions={{ exact: true }}>{t.nav.home}</Link>
           <Link to="/shop" className={linkCls} activeProps={active}>{t.nav.shop}</Link>
