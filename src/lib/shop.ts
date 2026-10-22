@@ -20,15 +20,15 @@ export function unitPrice(p: Product, market: MarketCode) {
 }
 
 export interface CatalogQuery {
-  q?: string;
-  cat?: string;
-  min?: number;
-  max?: number;
-  size?: string;
-  color?: string;
-  promo?: boolean;
-  sort?: "newest" | "price_asc" | "price_desc";
-  page?: number;
+  q?: string | undefined;
+  cat?: string | undefined;
+  min?: number | undefined;
+  max?: number | undefined;
+  size?: string | undefined;
+  color?: string | undefined;
+  promo?: boolean | undefined;
+  sort?: "newest" | "price_asc" | "price_desc" | undefined;
+  page?: number | undefined;
 }
 
 export function queryCatalog(query: CatalogQuery, market: MarketCode) {
