@@ -59,17 +59,17 @@ export function queryCatalog(query: CatalogQuery, market: MarketCode) {
 export function parseCatalogSearch(s: Record<string, unknown>): CatalogQuery {
   const num = (v: unknown) => (v === undefined || v === "" || isNaN(Number(v)) ? undefined : Number(v));
   const str = (v: unknown) => (typeof v === "string" && v ? v : undefined);
-  const sort = str(s.sort);
+  const sort = str(s["sort"]);
   return {
-    q: str(s.q) ?? (typeof s.q === "number" ? String(s.q) : undefined),
-    cat: str(s.cat),
-    min: num(s.min),
-    max: num(s.max),
-    size: str(s.size) ?? (typeof s.size === "number" ? String(s.size) : undefined),
-    color: str(s.color),
-    promo: s.promo === true || s.promo === 1 || s.promo === "1" ? true : undefined,
+    q: str(s["q"]) ?? (typeof s["q"] === "number" ? String(s["q"]) : undefined),
+    cat: str(s["cat"]),
+    min: num(s["min"]),
+    max: num(s["max"]),
+    size: str(s["size"]) ?? (typeof s["size"] === "number" ? String(s["size"]) : undefined),
+    color: str(s["color"]),
+    promo: s["promo"] === true || s["promo"] === 1 || s["promo"] === "1" ? true : undefined,
     sort: sort === "price_asc" || sort === "price_desc" || sort === "newest" ? sort : undefined,
-    page: num(s.page),
+    page: num(s["page"]),
   };
 }
 

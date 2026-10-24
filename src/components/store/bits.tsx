@@ -21,7 +21,7 @@ export function Logo({ size = "sm" }: { size?: "sm" | "lg" }) {
   );
 }
 
-export function ImagePlaceholder({ src, alt, tint, className, label }: { src?: string | null; alt: string; tint?: string; className?: string; label?: string }) {
+export function ImagePlaceholder({ src, alt, tint, className, label }: { src?: string | null | undefined; alt: string; tint?: string | undefined; className?: string | undefined; label?: string | undefined }) {
   const { t } = useStore();
   if (src) return <img src={src} alt={alt} loading="lazy" className={cn("h-full w-full object-cover", className)} />;
   return (

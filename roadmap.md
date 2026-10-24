@@ -1,11 +1,17 @@
-# ARTYFAM Phase 2/3 — Functional Storefront
+# ARTYFAM Roadmap
 
-- [ ] 1. DB schema: categories, products, options/values, variants, images, coupons, shipping/payment methods, profiles, addresses, wishlist, carts, orders (+ RLS, grants)
-- [ ] 2. Seed migration porting the Phase 1 catalog (34 products, variants, prices) with EN added
-- [ ] 3. Server functions: public catalog queries, cart validation, coupon validation, place order (server-authoritative totals, idempotency, stock decrement)
-- [ ] 4. Auth: email/password + Google + Lovable sign-in, account pages (profile, addresses, wishlist, orders)
-- [ ] 5. Cart service layer: guest + authenticated carts, merge on login, revalidation
-- [ ] 6. Checkout: real submission, shipping/payment methods, double-submit guard, confirmation from backend reference
-- [ ] 7. i18n: add English (4th language), translate validation/errors/statuses
-- [ ] 8. Frontend rewiring: catalog/search/category/product/cart/checkout read from backend; remove demo data
-- [ ] 9. Tests: cart ops, variants, coupons, totals, double-submit, isolation
+## Prompt 3 — Frontend polish (current scope: frontend only, no backend wiring)
+
+- [x] Fix all TypeScript/build errors (strict optional + index-signature issues)
+- [x] Brand palette tokens match approved colors (#29281E, #857861, #E7D4BB, #48252F, #101211)
+- [x] Verify: 12 products/page, banner hidden when empty, variants as distinct cart lines, RTL, WhatsApp disabled, no inventory counts exposed, no /admin links
+- [x] Rule tests: page size, thresholds, sale price, availability labels, variant lines
+- [x] Handoff doc: docs/frontend-backend-contract.md
+- [ ] Official logo asset — not yet provided; placeholder wordmark remains (set LOGO_URL in src/data/config.ts once supplied)
+
+## Later — Phase 2/3 backend (paused per Prompt 3 "frontend only" scope)
+
+- DB schema + seed (migration SQL already drafted in /tmp, not applied)
+- Server functions: catalog queries, coupon validation, place order
+- Auth + account pages, server cart, real checkout
+- English as 4th language

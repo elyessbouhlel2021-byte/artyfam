@@ -24,8 +24,8 @@ export interface Product {
   description: L10n;
   category: string;
   price: { TND: number; EUR: number };
-  salePrice?: { TND: number; EUR: number };
-  promoLabel?: L10n;
+  salePrice?: { TND: number; EUR: number } | undefined;
+  promoLabel?: L10n | undefined;
   colors: ColorVariant[];
   sizes: string[];
   availability: Availability;
@@ -119,7 +119,7 @@ function buildProducts(): Product[] {
     const onSale = i % 5 === 1;
     const colorCount = 2 + (i % 3);
     const colors = Array.from({ length: colorCount }, (_, k) => ({
-      ...COLORS[(i + k) % COLORS.length],
+      ...COLORS[(i + k) % COLORS.length]!,
       images: [] as string[],
     }));
     const day = String(28 - (i % 28)).padStart(2, "0");
@@ -137,7 +137,7 @@ function buildProducts(): Product[] {
       salePrice: onSale ? { TND: Math.round(tnd * 0.8), EUR: Math.round(eur * 0.8 * 10) / 10 } : undefined,
       promoLabel: onSale ? { fr: "-20%", it: "-20%", ar: "-20%" } : undefined,
       colors,
-      sizes: SIZES[b.cat],
+      sizes: SIZES[b.cat] ?? [],
       availability: i % 11 === 4 ? "out" : i % 7 === 3 ? "low" : "in_stock",
       createdAt: `2026-${month}-${day}`,
       featured: i % 6 === 0,

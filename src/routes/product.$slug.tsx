@@ -37,12 +37,13 @@ export function QtySelector({ value, onChange }: { value: number; onChange: (n: 
 function ProductPage() {
   const { product } = Route.useLoaderData();
   const { t, lang, addToCart } = useStore();
-  const [colorKey, setColorKey] = useState(product.colors[0].key);
-  const [size, setSize] = useState<string | null>(product.sizes.length === 1 ? product.sizes[0] : null);
+  const firstColor = product.colors[0]!;
+  const [colorKey, setColorKey] = useState(firstColor.key);
+  const [size, setSize] = useState<string | null>(product.sizes.length === 1 ? (product.sizes[0] ?? null) : null);
   const [qty, setQty] = useState(1);
   const [imgIdx, setImgIdx] = useState(0);
   const [sizeError, setSizeError] = useState(false);
-  const color = product.colors.find((c) => c.key === colorKey) ?? product.colors[0];
+  const color = product.colors.find((c) => c.key === colorKey) ?? firstColor;
   const gallerySlots = Math.max(color.images.length, 4);
   const cat = getCategory(product.category);
   const related = products.filter((p) => p.category === product.category && p.slug !== product.slug).slice(0, 4);
