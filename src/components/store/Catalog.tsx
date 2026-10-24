@@ -30,7 +30,7 @@ export function Pagination({ page, pages, onPage }: { page: number; pages: numbe
   );
 }
 
-function Filters({ query, set, lockCategory, onReset }: { query: CatalogQuery; set: (p: Partial<CatalogQuery>) => void; lockCategory?: boolean; onReset: () => void }) {
+function Filters({ query, set, lockCategory, onReset }: { query: CatalogQuery; set: (p: Partial<CatalogQuery>) => void; lockCategory?: boolean | undefined; onReset: () => void }) {
   const { t, lang } = useStore();
   return (
     <div className="space-y-6">
