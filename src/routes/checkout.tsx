@@ -40,11 +40,12 @@ function Checkout() {
     if (!validate()) { setStatus("idle"); return; }
     setStatus("loading");
     // UI-only simulation. Replace with a real order submission later.
-    setTimeout(() => {
-      if (previewMode === "error") { setStatus("error"); return; }
-      const ref = `PREVIEW-${Date.now().toString(36).toUpperCase()}`;
-      navigate({ to: "/order-confirmation/$reference", params: { reference: ref } });
-    }, 900);
+     // UI-only simulation. Replace with a real order submission later.
+  setTimeout(() => {
+    if (previewMode === "error") { setStatus("error"); return; }
+    const ref = `PREVIEW-${Date.now().toString(36).toUpperCase()}`;
+    navigate({ to: "/order-confirmation/$reference", params: { reference: ref } });
+  }, 900);
   };
 
   if (hydrated && lines.length === 0) {

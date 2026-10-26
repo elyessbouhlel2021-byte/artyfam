@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -20,6 +21,10 @@ import { Route as SearchRouteImport } from './routes/search'
 import { Route as ShippingRouteImport } from './routes/shipping'
 import { Route as ShopRouteImport } from './routes/shop'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminForgotPasswordRouteImport } from './routes/admin.forgot-password'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminResetPasswordRouteImport } from './routes/admin.reset-password'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
 import { Route as OrderConfirmationReferenceRouteImport } from './routes/order-confirmation.$reference'
 import { Route as ProductSlugRouteImport } from './routes/product.$slug'
@@ -27,6 +32,11 @@ import { Route as ProductSlugRouteImport } from './routes/product.$slug'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CartRoute = CartRouteImport.update({
@@ -79,6 +89,26 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminForgotPasswordRoute = AdminForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
+const AdminResetPasswordRoute = AdminResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AdminRouteRoute,
+} as any)
 const CategorySlugRoute = CategorySlugRouteImport.update({
   id: '/category/$slug',
   path: '/category/$slug',
@@ -98,6 +128,7 @@ const ProductSlugRoute = ProductSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
@@ -108,9 +139,13 @@ export interface FileRoutesByFullPath {
   '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
+  '/admin/forgot-password': typeof AdminForgotPasswordRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/reset-password': typeof AdminResetPasswordRoute
   '/category/$slug': typeof CategorySlugRoute
   '/order-confirmation/$reference': typeof OrderConfirmationReferenceRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -124,13 +159,18 @@ export interface FileRoutesByTo {
   '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
+  '/admin/forgot-password': typeof AdminForgotPasswordRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/reset-password': typeof AdminResetPasswordRoute
   '/category/$slug': typeof CategorySlugRoute
   '/order-confirmation/$reference': typeof OrderConfirmationReferenceRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRouteWithChildren
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
   '/contact': typeof ContactRoute
@@ -141,14 +181,19 @@ export interface FileRoutesById {
   '/shipping': typeof ShippingRoute
   '/shop': typeof ShopRoute
   '/terms': typeof TermsRoute
+  '/admin/forgot-password': typeof AdminForgotPasswordRoute
+  '/admin/login': typeof AdminLoginRoute
+  '/admin/reset-password': typeof AdminResetPasswordRoute
   '/category/$slug': typeof CategorySlugRoute
   '/order-confirmation/$reference': typeof OrderConfirmationReferenceRoute
   '/product/$slug': typeof ProductSlugRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/cart'
     | '/checkout'
     | '/contact'
@@ -159,9 +204,13 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/shop'
     | '/terms'
+    | '/admin/forgot-password'
+    | '/admin/login'
+    | '/admin/reset-password'
     | '/category/$slug'
     | '/order-confirmation/$reference'
     | '/product/$slug'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -175,12 +224,17 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/shop'
     | '/terms'
+    | '/admin/forgot-password'
+    | '/admin/login'
+    | '/admin/reset-password'
     | '/category/$slug'
     | '/order-confirmation/$reference'
     | '/product/$slug'
+    | '/admin'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/cart'
     | '/checkout'
     | '/contact'
@@ -191,13 +245,18 @@ export interface FileRouteTypes {
     | '/shipping'
     | '/shop'
     | '/terms'
+    | '/admin/forgot-password'
+    | '/admin/login'
+    | '/admin/reset-password'
     | '/category/$slug'
     | '/order-confirmation/$reference'
     | '/product/$slug'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRouteWithChildren
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
   ContactRoute: typeof ContactRoute
@@ -220,6 +279,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cart': {
@@ -292,6 +358,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/forgot-password': {
+      id: '/admin/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/admin/forgot-password'
+      preLoaderRoute: typeof AdminForgotPasswordRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
+    '/admin/reset-password': {
+      id: '/admin/reset-password'
+      path: '/reset-password'
+      fullPath: '/admin/reset-password'
+      preLoaderRoute: typeof AdminResetPasswordRouteImport
+      parentRoute: typeof AdminRouteRoute
+    }
     '/category/$slug': {
       id: '/category/$slug'
       path: '/category/$slug'
@@ -316,8 +410,27 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminRouteRouteChildren {
+  AdminForgotPasswordRoute: typeof AdminForgotPasswordRoute
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminResetPasswordRoute: typeof AdminResetPasswordRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteRouteChildren: AdminRouteRouteChildren = {
+  AdminForgotPasswordRoute: AdminForgotPasswordRoute,
+  AdminLoginRoute: AdminLoginRoute,
+  AdminResetPasswordRoute: AdminResetPasswordRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
+  AdminRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRouteWithChildren,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
   ContactRoute: ContactRoute,
