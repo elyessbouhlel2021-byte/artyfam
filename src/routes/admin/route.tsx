@@ -1,6 +1,7 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { createServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import { isSupabaseConfigured } from "@/integrations/supabase/config";
 
 const checkAdminAccess = createServerFn({ method: "GET" }).handler(async () => {
   const { requireAdmin, AdminGuardError } = await import("@/integrations/supabase/admin-guard");
@@ -25,11 +26,28 @@ export const Route = createFileRoute("/admin")({
 
     // UX-only check: real enforcement happens server-side in checkAdminAccess
     // (and independently, in any privileged server function).
-    const { data: { session } } = await supabase.auth.getSession();
+    if (!isSupabaseConfigured) {
+      // No public Supabase configuration in this build: there can be no
+      // session, so there is nothing to check. Fail closed.
+      throw redirect({ to: "/admin/login" });
+    }
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
     if (!session) {
       throw redirect({ to: "/admin/login" });
     }
-    const result = await checkAdminAccess();
+
+    let result: Awaited<ReturnType<typeof checkAdminAccess>>;
+    try {
+      result = await checkAdminAccess();
+    } catch {
+      // The server runtime is unreachable — e.g. the static GitHub Pages
+      // deployment, which cannot execute server functions. The privileged
+      // check cannot be performed, so the dashboard must not render.
+      throw redirect({ to: "/admin/login" });
+    }
     if (!result.ok) {
       throw redirect({ to: "/admin/login" });
     }
