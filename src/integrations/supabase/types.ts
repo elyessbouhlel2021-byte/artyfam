@@ -14,6 +14,20 @@ export type Database = {
   }
   public: {
     Tables: {
+      // Used only by the trusted server-side admin authorization guard.
+      // Ensure the matching table exists in Supabase before server deployment.
+      admin_access: {
+        Row: {
+          user_id: string
+        }
+        Insert: {
+          user_id: string
+        }
+        Update: {
+          user_id?: string
+        }
+        Relationships: []
+      }
       addresses: {
         Row: {
           address: string
