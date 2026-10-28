@@ -1,0 +1,75 @@
+name: Build and deploy GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+      - feat/github-pages-deploy
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build static site
+    runs-on: ubuntu-latest
+    env:
+      VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
+      VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Type-check
+        run: bunx tsc --noEmit
+
+      - name: Build and validate GitHub Pages output
+        run: bun run build:pages
+
+      - name: Verify publishable output
+        shell: bash
+        run: |
+          test -s .output/public/index.html
+          test -s .output/public/404.html
+          test -f .output/public/.nojekyll
+          echo "GitHub Pages artifact is ready."
+
+      - name: Warn if Supabase public variables are missing
+        if: env.VITE_SUPABASE_URL == '' || env.VITE_SUPABASE_PUBLISHABLE_KEY == ''
+        run: echo "::warning::Set VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY under Settings > Secrets and variables > Actions > Variables to enable the browser-side Supabase features."
+
+      - name: Upload Pages artifact
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .output/public
+
+  deploy:
+    name: Deploy GitHub Pages
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
