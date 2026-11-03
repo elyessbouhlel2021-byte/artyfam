@@ -2,10 +2,11 @@ import { useNavigate } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
-import { ALL_COLORS, ALL_SIZES, categories } from "@/data/catalog";
+import { ALL_COLORS, ALL_SIZES, categories, products as mockProducts } from "@/data/catalog";
 import { queryCatalog, type CatalogQuery } from "@/lib/shop";
 import { ProductGrid } from "./ProductCard";
 import { cn } from "@/lib/utils";
+import type { Product } from "@/data/catalog";
 
 const field = "h-9 w-full rounded-md border border-input bg-card px-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
@@ -82,12 +83,11 @@ function Filters({ query, set, lockCategory, onReset }: { query: CatalogQuery; s
 }
 
 /** Reusable catalog: filters + sorting + paginated grid, driven by URL search params. */
-export function Catalog({ query, lockCategory, hideSearch }: { query: CatalogQuery; lockCategory?: boolean; hideSearch?: boolean }) {
+export function Catalog({ query, lockCategory, hideSearch, products }: { query: CatalogQuery; lockCategory?: boolean; hideSearch?: boolean; products?: Product[] }) {
   const { t, market } = useStore();
   const navigate = useNavigate();
   const [showFilters, setShowFilters] = useState(false);
-  const result = queryCatalog(query, market);
-
+  const result = queryCatalog(query, market, products ?? mockProducts);
   const set = (patch: Partial<CatalogQuery>, keepPage = false) =>
     navigate({ to: ".", search: (prev: Record<string, unknown>) => ({ ...prev, ...patch, page: keepPage ? patch.page : undefined }), replace: true, resetScroll: false });
   const reset = () => navigate({ to: ".", search: () => (lockCategory || hideSearch ? { q: hideSearch ? query.q : undefined } : {}), replace: true });

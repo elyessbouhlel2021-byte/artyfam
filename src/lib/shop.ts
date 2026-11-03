@@ -1,4 +1,4 @@
-import { products, type Lang, type Product } from "@/data/catalog";
+import type { Lang, Product } from "@/data/catalog";
 import { MARKETS, PAGE_SIZE, type MarketCode } from "@/data/config";
 
 const LOCALES: Record<Lang, string> = { fr: "fr", it: "it", ar: "ar" };
@@ -31,7 +31,7 @@ export interface CatalogQuery {
   page?: number | undefined;
 }
 
-export function queryCatalog(query: CatalogQuery, market: MarketCode) {
+export function queryCatalog(query: CatalogQuery, market: MarketCode, products: Product[]) {
   const q = query.q?.trim().toLowerCase();
   let list = products.filter((p) => {
     if (q && !Object.values(p.name).some((n) => n.toLowerCase().includes(q))) return false;

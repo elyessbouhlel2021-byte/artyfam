@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { LogOut, Package, Layers, ShoppingCart, Boxes } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -15,7 +15,7 @@ function AdminDashboard() {
   };
 
   const cards = [
-    { icon: Package, title: "Produits", desc: "Gérer le catalogue (à venir)" },
+    { icon: Package, title: "Produits", desc: "Gérer le catalogue", to: "/admin/products" as const },
     { icon: Layers, title: "Catégories", desc: "Gérer les catégories (à venir)" },
     { icon: Boxes, title: "Stock", desc: "Gérer l'inventaire (à venir)" },
     { icon: ShoppingCart, title: "Commandes", desc: "Suivre les commandes (à venir)" },
@@ -37,13 +37,28 @@ function AdminDashboard() {
         <h2 className="text-2xl font-display">Tableau de bord</h2>
         <p className="mt-2 text-sm text-muted-foreground">Bienvenue. Les sections de gestion arrivent bientôt.</p>
         <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {cards.map((c) => (
-            <div key={c.title} className="rounded-lg border bg-card p-6">
-              <c.icon className="h-6 w-6 text-primary" />
-              <h3 className="mt-3 font-semibold">{c.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
-            </div>
-          ))}
+          {cards.map((c) => {
+            const content = (
+              <>
+                <c.icon className="h-6 w-6 text-primary" />
+                <h3 className="mt-3 font-semibold">{c.title}</h3>
+                <p className="mt-1 text-sm text-muted-foreground">{c.desc}</p>
+              </>
+            );
+            return c.to ? (
+              <Link
+                key={c.title}
+                to={c.to}
+                className="rounded-lg border bg-card p-6 transition hover:bg-accent"
+              >
+                {content}
+              </Link>
+            ) : (
+              <div key={c.title} className="rounded-lg border bg-card p-6">
+                {content}
+              </div>
+            );
+          })}
         </div>
       </main>
     </div>

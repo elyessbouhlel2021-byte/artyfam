@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite dev",
     "build": "vite build",
+<<<<<<< Updated upstream
     "build:pages": "vite build --config vite.pages.config.ts && node scripts/prepare-pages-output.mjs",
+=======
+    "build:pages": "vite build --config vite.pages.config.ts",
+>>>>>>> Stashed changes
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",

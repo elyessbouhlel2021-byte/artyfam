@@ -27,7 +27,11 @@ function AdminLogin() {
 
     if (import.meta.env.DEV) {
       // eslint-disable-next-line no-console
+<<<<<<< Updated upstream
       console.info("[admin-login/dev] Supabase URL in use:", import.meta.env["VITE_SUPABASE_URL"]);
+=======
+      
+>>>>>>> Stashed changes
     }
 
     const { error } = await supabase.auth.signInWithPassword({ email, password });
