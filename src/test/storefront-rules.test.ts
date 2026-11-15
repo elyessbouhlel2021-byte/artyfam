@@ -6,13 +6,13 @@ import { cartTotals, queryCatalog, unitPrice } from "@/lib/shop";
 describe("storefront rules", () => {
   it("shows exactly 12 products per catalog page", () => {
     expect(PAGE_SIZE).toBe(12);
-    const page1 = queryCatalog({ page: 1 }, "TN");
+    const page1 = queryCatalog({ page: 1 }, "TN", products);
     expect(page1.items.length).toBeLessThanOrEqual(12);
     if (page1.pages > 1) expect(page1.items.length).toBe(12);
   });
 
   it("clamps out-of-range page numbers instead of showing an empty grid", () => {
-    const result = queryCatalog({ page: 999 }, "TN");
+    const result = queryCatalog({ page: 999 }, "TN", products);
     expect(result.page).toBe(result.pages);
     expect(result.items.length).toBeGreaterThan(0);
   });
