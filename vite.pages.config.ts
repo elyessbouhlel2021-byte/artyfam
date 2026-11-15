@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 // Static build for GitHub Pages.
 //
 // `vite.config.ts` (the default build) keeps producing the Nitro/Cloudflare
@@ -99,72 +98,3 @@ export default defineConfig({
     },
   },
 });
-=======
-
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
-import { categories, products } from "./src/data/catalog";
-
-// Pages publiques elli najmou nجهّزوهم static.
-const STATIC_PAGES = [
-  "/",
-  "/shop",
-  "/cart",
-  "/checkout",
-  "/contact",
-  "/faq",
-  "/privacy",
-  "/returns",
-  "/search",
-  "/shipping",
-  "/terms",
-];
-
-// Routes dynamiques générées men catalogue local.
-const CATEGORY_ROUTES = categories.map(
-  (category) => `/category/${category.slug}`,
-);
-
-const PRODUCT_ROUTES = products.map(
-  (product) => `/product/${product.slug}`,
-);
-
-// Les routes publiques eli bech yet3amloulhom prerender.
-const PAGES_PRERENDER_ROUTES = [
-  ...STATIC_PAGES,
-  ...CATEGORY_ROUTES,
-  ...PRODUCT_ROUTES,
-];
-
-// Explicitement autoriser uniquement les routes publiques.
-// N'ajoutouch les pages admin ni les pages protégées.
-const TANSTACK_PRERENDER_PAGES = PAGES_PRERENDER_ROUTES.map((path) => ({
-  path,
-  prerender: {
-    enabled: true,
-  },
-}));
-
-// Nitro يستعمل preset GitHub Pages pour produire un site statique.
-const nitroOptions = {
-  preset: "github-pages",
-};
-
-import { defineConfig } from "@lovable.dev/vite-tanstack-config";
-
-export default defineConfig({
-  tanstackStart: {
-    server: {
-      entry: "server",
-    },
-
-    // Nوقفوا prerender مؤقتًا لتفادي خطأ البناء الحالي.
-    prerender: {
-      enabled: false,
-    },
-  },
-
-  nitro: {
-    preset: "cloudflare-module",
-  },
-});
->>>>>>> Stashed changes
