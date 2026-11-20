@@ -39,7 +39,10 @@ jobs:
 
       - name: Build and validate GitHub Pages output
         run: bun run build:pages
-
+      - name: Debug output
+        run: |
+          ls -la .output || true
+          ls -la .output/public || true
       - name: Verify publishable output
         shell: bash
         run: |
