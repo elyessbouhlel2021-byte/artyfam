@@ -2,7 +2,6 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Menu, Search, ShoppingBag, X } from "lucide-react";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
-import { categories } from "@/data/catalog";
 import { LanguageSelector, Logo, MarketSelector, ThemeToggle } from "./bits";
 
 function SearchForm({ onDone }: { onDone?: () => void }) {
@@ -21,7 +20,7 @@ function SearchForm({ onDone }: { onDone?: () => void }) {
 }
 
 export function Header() {
-  const { t, lang, cartCount, hydrated } = useStore();
+  const { t, cartCount, hydrated } = useStore();
   const [open, setOpen] = useState(false);
   const linkCls = "text-sm font-medium text-foreground/80 transition hover:text-foreground";
   const active = { className: "text-foreground underline underline-offset-8 decoration-gold" };
@@ -36,9 +35,6 @@ export function Header() {
         <nav aria-label="Main" className="ms-6 hidden items-center gap-6 md:flex">
           <Link to="/" className={linkCls} activeProps={active} activeOptions={{ exact: true }}>{t.nav.home}</Link>
           <Link to="/shop" className={linkCls} activeProps={active}>{t.nav.shop}</Link>
-          {categories.filter((c) => c.popular).map((c) => (
-            <Link key={c.slug} to="/category/$slug" params={{ slug: c.slug }} className={linkCls} activeProps={active}>{c.name[lang]}</Link>
-          ))}
           <Link to="/contact" className={linkCls} activeProps={active}>{t.nav.contact}</Link>
         </nav>
         <div className="ms-auto hidden w-56 lg:block"><SearchForm /></div>
@@ -60,10 +56,6 @@ export function Header() {
           <div className="container-page flex flex-col gap-1 py-4">
             <Link to="/" onClick={() => setOpen(false)} className="py-2">{t.nav.home}</Link>
             <Link to="/shop" onClick={() => setOpen(false)} className="py-2">{t.nav.shop}</Link>
-            {categories.map((c) => (
-              <Link key={c.slug} to="/category/$slug" params={{ slug: c.slug }} onClick={() => setOpen(false)} className="py-2 ps-3 text-sm text-muted-foreground">{c.name[lang]}</Link>
-            ))}
-            <Link to="/faq" onClick={() => setOpen(false)} className="py-2">{t.nav.faq}</Link>
             <Link to="/contact" onClick={() => setOpen(false)} className="py-2">{t.nav.contact}</Link>
             <div className="pt-2 sm:hidden"><MarketSelector className="w-full" /></div>
           </div>

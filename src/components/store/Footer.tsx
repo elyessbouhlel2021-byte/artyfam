@@ -1,12 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { Instagram, Facebook, Mail, MessageCircle } from "lucide-react";
 import { useStore } from "@/lib/store";
-import { categories } from "@/data/catalog";
 import { CONTACT, WHATSAPP_NUMBER } from "@/data/config";
 import { Logo } from "./bits";
 
 export function Footer() {
-  const { t, lang } = useStore();
+  const { t } = useStore();
   const l = "text-sm text-primary-foreground/75 transition hover:text-primary-foreground";
   return (
     <footer className="mt-16 bg-primary text-primary-foreground dark:bg-secondary dark:text-secondary-foreground">
@@ -18,9 +17,7 @@ export function Footer() {
         <div>
           <h3 className="eyebrow mb-4">{t.nav.shop}</h3>
           <ul className="space-y-2">
-            {categories.map((c) => (
-              <li key={c.slug}><Link to="/category/$slug" params={{ slug: c.slug }} className={l}>{c.name[lang]}</Link></li>
-            ))}
+            <li><Link to="/shop" className={l}>{t.common.viewAll}</Link></li>
           </ul>
         </div>
         <div>

@@ -2,11 +2,11 @@ import { useNavigate } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, SlidersHorizontal } from "lucide-react";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
-import { ALL_COLORS, ALL_SIZES, categories, products as mockProducts } from "@/data/catalog";
+import { ALL_COLORS, ALL_SIZES, categories as mockCategories, products as mockProducts } from "@/data/catalog";
 import { queryCatalog, type CatalogQuery } from "@/lib/shop";
 import { ProductGrid } from "./ProductCard";
 import { cn } from "@/lib/utils";
-import type { Product } from "@/data/catalog";
+import type { Category, Product } from "@/data/catalog";
 
 const field = "h-9 w-full rounded-md border border-input bg-card px-2 text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 
@@ -31,7 +31,7 @@ export function Pagination({ page, pages, onPage }: { page: number; pages: numbe
   );
 }
 
-function Filters({ query, set, lockCategory, onReset }: { query: CatalogQuery; set: (p: Partial<CatalogQuery>) => void; lockCategory?: boolean | undefined; onReset: () => void }) {
+function Filters({ query, set, lockCategory, categories, onReset }: { categories: Category[]; query: CatalogQuery; set: (p: Partial<CatalogQuery>) => void; lockCategory?: boolean | undefined; onReset: () => void }) {
   const { t, lang } = useStore();
   return (
     <div className="space-y-6">
@@ -83,7 +83,7 @@ function Filters({ query, set, lockCategory, onReset }: { query: CatalogQuery; s
 }
 
 /** Reusable catalog: filters + sorting + paginated grid, driven by URL search params. */
-export function Catalog({ query, lockCategory, hideSearch, products }: { query: CatalogQuery; lockCategory?: boolean; hideSearch?: boolean; products?: Product[] }) {
+export function Catalog({ query, lockCategory, hideSearch, products, categories = mockCategories }: { query: CatalogQuery; lockCategory?: boolean; hideSearch?: boolean; products?: Product[]; categories?: Category[] }) {
   const { t, market } = useStore();
   const navigate = useNavigate();
   const [showFilters, setShowFilters] = useState(false);
@@ -97,7 +97,7 @@ export function Catalog({ query, lockCategory, hideSearch, products }: { query: 
       <div className="grid gap-8 lg:grid-cols-[15rem_1fr]">
         <aside aria-label={t.filters.title} className={cn("lg:block", showFilters ? "block rounded-lg border bg-card p-4 lg:border-0 lg:bg-transparent lg:p-0" : "hidden")}>
           <h2 className="mb-5 hidden font-sans text-sm font-semibold lg:block">{t.filters.title}</h2>
-          <Filters query={query} set={set} lockCategory={lockCategory} onReset={reset} />
+          <Filters query={query} set={set} lockCategory={lockCategory} categories={categories} onReset={reset} />
         </aside>
         <div>
           <div className="mb-6 flex flex-wrap items-center justify-between gap-3">

@@ -44,7 +44,7 @@ function Home() {
         <Section title={t.home.categories} eyebrow="ARTYFAM">
           <div className="grid grid-cols-2 gap-3 sm:gap-5 md:grid-cols-3 lg:grid-cols-6">
             {categories.map((c) => (
-              <Link key={c.slug} to="/category/$slug" params={{ slug: c.slug }} className="group block">
+              <Link key={c.slug} to="/shop" search={{ cat: c.slug }} className="group block">
                 <div className="aspect-square overflow-hidden rounded-lg border transition group-hover:border-gold">
                   <ImagePlaceholder src={c.image} alt={c.name[lang]} />
                 </div>

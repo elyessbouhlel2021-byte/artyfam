@@ -1,33 +1,15 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
-import { getCategory } from "@/data/catalog";
-import { parseCatalogSearch } from "@/lib/shop";
-import { seo } from "@/lib/seo";
-import { useStore } from "@/lib/store";
-import { PageHeader } from "@/components/store/bits";
-import { Catalog } from "@/components/store/Catalog";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+
+// Dedicated category pages are retired. Old links go to the shop; real
+// (Supabase) category ids keep their filter, the three legacy static slugs do not.
+const LEGACY = new Set(["vetements", "chaussures", "sacs"]);
 
 export const Route = createFileRoute("/category/$slug")({
-  validateSearch: parseCatalogSearch,
-  loader: ({ params }) => {
-    const category = getCategory(params.slug);
-    if (!category) throw notFound();
-    return { category };
+  beforeLoad: ({ params }) => {
+    throw redirect({
+      to: "/shop",
+      search: LEGACY.has(params.slug) ? {} : { cat: params.slug },
+      replace: true,
+    });
   },
-  head: ({ loaderData }) =>
-    loaderData
-      ? seo(loaderData.category.name.fr, `Découvrez la catégorie ${loaderData.category.name.fr} chez ARTYFAM.`)
-      : { meta: [{ title: "Catégorie | ARTYFAM" }, { name: "robots", content: "noindex" }] },
-  component: CategoryPage,
 });
-
-function CategoryPage() {
-  const { lang } = useStore();
-  const { category } = Route.useLoaderData();
-  const search = Route.useSearch();
-  return (
-    <>
-      <PageHeader title={category.name[lang]} />
-      <Catalog query={{ ...search, cat: category.slug }} lockCategory />
-    </>
-  );
-}
